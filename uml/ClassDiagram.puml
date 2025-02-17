@@ -1,0 +1,54 @@
+@startuml
+class AuthController {
+  + register(Request) : Response
+  + login(Request) : Response
+}
+
+class BookController {
+  + index() : Response
+  + show(int id) : Response
+  + store(Request) : Response
+  + destroy(int id) : Response
+  + addToFavorites(int bookId) : Response
+  + removeFromFavorites(int bookId) : Response
+}
+
+class BookCsvController {
+  + exportCsv() : Response
+}
+
+class RoleController {
+  + changeRole(int userId, Request) : Response
+}
+
+class User {
+  + id : int
+  + email : string
+  + password : string
+  + role : string
+}
+
+class Book {
+  + id : int
+  + title : string
+  + description : string
+}
+
+class Genre {
+  + id : int
+  + name : string
+}
+
+class Author {
+  + id : int
+  + name : string
+}
+
+AuthController --> User
+BookController --> Book
+BookController --> User : "favorites"
+BookCsvController --> Book
+RoleController --> User
+Book --> Genre
+Book --> Author
+@enduml
