@@ -39,15 +39,18 @@
    git clone https://github.com/MKroppp/backend2025.git
 
 2. Установить зависимости:
+   ```bash
     cd backend2025
     composer install
 
 3. Настроить .env файл, указав параметры для подключения к базе данных PostgreSQL.
 
 4. Выполнить миграции:
+   ```bash
    php artisan migrate
 
 5. Запустить сервер:
+   ```bash
    php -S localhost:8000 -t public
 
 
