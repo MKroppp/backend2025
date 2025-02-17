@@ -52,5 +52,3 @@
 5. Запустить сервер:
    ```bash
    php -S localhost:8000 -t public
-
-
