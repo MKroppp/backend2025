@@ -37,3 +37,17 @@
 1. Клонировать репозиторий:
    ```bash
    git clone https://github.com/MKroppp/backend2025.git
+
+2. Установить зависимости:
+    cd backend2025
+    composer install
+
+3. Настроить .env файл, указав параметры для подключения к базе данных PostgreSQL.
+
+4. Выполнить миграции:
+   php artisan migrate
+
+5. Запустить сервер:
+   php -S localhost:8000 -t public
+
+
