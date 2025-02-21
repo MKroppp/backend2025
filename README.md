@@ -115,19 +115,6 @@ API для онлайн библиотеки, Регистрация, автор
     SET photo_link = 'new_photo_link'
     WHERE user_id = 67;
 20. ```sql
-    DELETE FROM profiles
-    WHERE user_id = 78;
-    
-    DELETE FROM users_roles
-    WHERE user_id = 78;
-    
-    DELETE FROM comments
-    WHERE author_id = 78;
-    
-    DELETE FROM users
-    WHERE id = 78;
-    
-    -- if foreign keys are set with ON DELETE CASCADE, this single query is enough:
     DELETE FROM users
     WHERE id = 78;
 
