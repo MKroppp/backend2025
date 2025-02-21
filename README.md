@@ -81,5 +81,6 @@
    - **POST /books**: Добавление новой книги (требует роль администратора).
    - **POST /favorites**: Добавление книги в избранное (требует авторизацию).
    - **DELETE /favorites/{book_id}**: Удаление книги из избранного (требует авторизацию).
-   - ```bash
-     php artisan user:change-role 1 admin для изменения роли юзера.
+   - для изменения роли юзера.
+     ```bash
+     php artisan user:change-role 1 admin
