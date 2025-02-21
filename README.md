@@ -75,7 +75,7 @@ API для онлайн библиотеки, Регистрация, автор
 14. composer require <имя пакета>
 15. 1.2.X
 16. ```sql
-SELECT
+    SELECT
     a.id AS article_id,
     a.title AS article_title,
     a.body AS article_body,
@@ -83,10 +83,10 @@ SELECT
     c.title AS comment_title,
     c.body AS comment_body,
     c.parent_id AS comment_parent_id
-FROM
-    articles a
-        JOIN
-    comments c ON a.id = c.article_id
-WHERE
-    a.id = 101;
+    FROM
+        articles a
+            JOIN
+        comments c ON a.id = c.article_id
+    WHERE
+        a.id = 101;
 17. 
