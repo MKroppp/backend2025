@@ -89,4 +89,45 @@ API для онлайн библиотеки, Регистрация, автор
         comments c ON a.id = c.article_id
     WHERE
         a.id = 101;
-17. 
+17. ```sql
+    SELECT
+    u.id AS user_id,
+    u.email,
+    p.first_name,
+    p.last_name,
+    p.photo_link,
+    r.title AS role_title
+    FROM
+        users u
+            JOIN
+        profiles p ON u.id = p.user_id
+            JOIN
+        users_roles ur ON u.id = ur.user_id
+            JOIN
+        roles r ON ur.role_id = r.id
+    WHERE
+        u.id = 256;
+18. ```sql
+    INSERT INTO users_roles (user_id, role_id)
+    VALUES (225, 8);
+19. ```sql
+    UPDATE profiles
+    SET photo_link = 'new_photo_link'
+    WHERE user_id = 67;
+20. ```sql
+    DELETE FROM profiles
+    WHERE user_id = 78;
+    
+    DELETE FROM users_roles
+    WHERE user_id = 78;
+    
+    DELETE FROM comments
+    WHERE author_id = 78;
+    
+    DELETE FROM users
+    WHERE id = 78;
+    
+    -- if foreign keys are set with ON DELETE CASCADE, this single query is enough:
+    DELETE FROM users
+    WHERE id = 78;
+
