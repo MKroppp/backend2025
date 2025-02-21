@@ -74,8 +74,8 @@ API для онлайн библиотеки, Регистрация, автор
 13. Установит все зависимости согласно composer.json (даже если есть composer.lock файл) в vendor директорию, после обновит composer.lock.
 14. composer require <имя пакета>
 15. 1.2.X
-16. ```bash
-    SELECT
+16. ```sql
+SELECT
     a.id AS article_id,
     a.title AS article_title,
     a.body AS article_body,
