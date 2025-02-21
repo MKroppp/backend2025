@@ -57,3 +57,36 @@ API для онлайн библиотеки, Регистрация, автор
    - Для изменения роли юзера:
      ```bash
      php artisan user:change-role 1 admin
+     
+## Тестовое задание:
+1. bool(false)
+2. bool(true)
+3. 10
+4. 10
+5. Вылетит ошибка.
+6. 5
+7. 10
+8. Вылетит ошибка.
+9. Выполнится успешно.
+10. Dog move Animal move
+11. Animal breath Animal breath
+12. Установит все зависимости согласно composer.lock (если есть) в vendor директорию, иначе использует composer.json и после создаст composer.lock файл.
+13. Установит все зависимости согласно composer.json (даже если есть composer.lock файл) в vendor директорию, после обновит composer.lock.
+14. composer require <имя пакета>
+15. 1.2.X
+16. ```bash
+    SELECT
+    a.id AS article_id,
+    a.title AS article_title,
+    a.body AS article_body,
+    c.id AS comment_id,
+    c.title AS comment_title,
+    c.body AS comment_body,
+    c.parent_id AS comment_parent_id
+FROM
+    articles a
+        JOIN
+    comments c ON a.id = c.article_id
+WHERE
+    a.id = 101;
+17. 
