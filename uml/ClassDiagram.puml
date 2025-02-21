@@ -1,54 +1,84 @@
 @startuml
-class AuthController {
-  + register(Request) : Response
-  + login(Request) : Response
-}
-
-class BookController {
-  + index() : Response
-  + show(int id) : Response
-  + store(Request) : Response
-  + destroy(int id) : Response
-  + addToFavorites(int bookId) : Response
-  + removeFromFavorites(int bookId) : Response
-}
-
-class BookCsvController {
-  + exportCsv() : Response
-}
-
-class RoleController {
-  + changeRole(int userId, Request) : Response
-}
 
 class User {
-  + id : int
-  + email : string
-  + password : string
-  + role : string
+    +int id
+    +string email
+    +string password
+    +string role
+    +favorites() : Collection
+    +getJWTIdentifier() : mixed
+    +getJWTCustomClaims() : array
 }
 
 class Book {
-  + id : int
-  + title : string
-  + description : string
+    +int id
+    +string title
+    +string description
+    +genres() : Collection
+    +authors() : Collection
+    +users() : Collection
 }
 
 class Genre {
-  + id : int
-  + name : string
+    +int id
+    +string name
+    +books() : Collection
 }
 
 class Author {
-  + id : int
-  + name : string
+    +int id
+    +string name
+    +books() : Collection
 }
 
-AuthController --> User
-BookController --> Book
-BookController --> User : "favorites"
-BookCsvController --> Book
-RoleController --> User
-Book --> Genre
-Book --> Author
+class AuthController {
+    +register(request : Request) : Response
+    +login(request : Request) : Response
+    +validateRegisterData(request : Request) : Response
+    +validateLoginData(request : Request) : Response
+}
+
+class BookController {
+    +index() : Response
+    +show(id : int) : Response
+    +store(request : Request) : Response
+    +destroy(id : int) : Response
+    +addToFavorites(id : int) : Response
+    +removeFromFavorites(id : int) : Response
+    +exportBooks() : Response
+}
+
+class GenreController {
+    +index() : Response
+    +show(id : int) : Response
+}
+
+class RoleController {
+    +changeRole(request : Request, id : int) : Response
+}
+
+class Authenticate {
+    +handle(request : Request, next : Closure) : Response
+}
+
+User "1" -- "0..*" Book : favorites
+Book "1" -- "0..*" Genre : genres
+Book "1" -- "0..*" Author : authors
+Genre "1" -- "0..*" Book : books
+Author "1" -- "0..*" Book : books
+
+AuthController -[hidden]-> User : manages
+BookController -[hidden]-> Book : manages
+RoleController -[hidden]-> User : manages
+GenreController -[hidden]-> Genre : manages
+Authenticate -[hidden]-> AuthController : applies to
+
+BookController "1" -- "0..*" Genre : manages
+BookController "1" -- "0..*" Author : manages
+
+BookController "1" -- "0..*" User : adds to favorites
+BookController "1" -- "0..*" User : removes from favorites
+
+RoleController "1" -- "0..*" User : modifies role
+
 @enduml

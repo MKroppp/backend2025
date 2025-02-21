@@ -27,7 +27,7 @@ class BookController extends Controller
         return response()->json($book);
     }
 
-    // Добавление новой книги (только для администраторов)
+    // Добавление новой книги
     public function store(Request $request)
 {
     $user = JWTAuth::parseToken()->authenticate();
@@ -46,49 +46,60 @@ class BookController extends Controller
         $validationErrors['description'] = 'Description is required';
     }
 
-    if (empty($request->genre_ids) || !is_array($request->genre_ids)) {
-        $validationErrors['genre_ids'] = 'Genre IDs must be a non-empty array';
+    if (empty($request->genres) || !is_array($request->genres)) {
+        $validationErrors['genres'] = 'Genres must be a non-empty array';
     }
 
-    if (empty($request->author_ids) || !is_array($request->author_ids)) {
-        $validationErrors['author_ids'] = 'Author IDs must be a non-empty array';
+    if (empty($request->authors) || !is_array($request->authors)) {
+        $validationErrors['authors'] = 'Authors must be a non-empty array';
     }
 
     if (!empty($validationErrors)) {
         return response()->json(['errors' => $validationErrors], 400);
     }
 
-    // Проверка существования жанров и авторов
-    $invalidGenres = DB::table('genres')
-        ->whereIn('id', $request->genre_ids)
-        ->pluck('id')
-        ->diff($request->genre_ids);
+    // Создание жанров, если они не существуют
+    $genreIds = collect($request->genres)->map(function ($genreName) {
+        $genre = DB::table('genres')->where('name', $genreName)->first();
 
-    if ($invalidGenres->isNotEmpty()) {
-        return response()->json(['error' => 'Invalid genre IDs: ' . implode(', ', $invalidGenres->toArray())], 400);
-    }
+        if (!$genre) {
+            $genre = DB::table('genres')->insertGetId(['name' => $genreName]);
+        } else {
+            $genre = $genre->id;
+        }
 
-    $invalidAuthors = DB::table('authors')
-        ->whereIn('id', $request->author_ids)
-        ->pluck('id')
-        ->diff($request->author_ids);
+        return $genre;
+    });
 
-    if ($invalidAuthors->isNotEmpty()) {
-        return response()->json(['error' => 'Invalid author IDs: ' . implode(', ', $invalidAuthors->toArray())], 400);
-    }
+    // Создание авторов, если они не существуют
+    $authorIds = collect($request->authors)->map(function ($authorName) {
+        $author = DB::table('authors')->where('name', $authorName)->first();
 
+        if (!$author) {
+            $author = DB::table('authors')->insertGetId(['name' => $authorName]);
+        } else {
+            $author = $author->id;
+        }
+
+        return $author;
+    });
+
+    // Создаем книгу
     $book = Book::create([
         'title' => $request->title,
         'description' => $request->description,
     ]);
 
-    $book->genres()->sync($request->genre_ids);
-    $book->authors()->sync($request->author_ids);
+    // Связываем книгу с жанрами и авторами
+    $book->genres()->sync($genreIds);
+    $book->authors()->sync($authorIds);
 
     return response()->json($book, 201);
 }
 
-    // Удаление книги (только для администраторов)
+
+
+    // Удаление книги 
     public function destroy($id)
     {
         // Получаем текущего пользователя
