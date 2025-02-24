@@ -8,10 +8,8 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 
 class BookCsvController extends Controller
 {
-    // Выгрузка списка книг в CSV
     public function exportCsv()
     {
-        // Проверка, что пользователь является администратором
         $user = JWTAuth::user();
         if ($user->role !== 'admin') {
             return response()->json(['error' => 'Unauthorized'], 403);
@@ -20,13 +18,11 @@ class BookCsvController extends Controller
         $books = Book::all();
         $csvHeader = ['ID', 'Title', 'Description'];
 
-        // Подготовка CSV
         $csvData = [];
         foreach ($books as $book) {
             $csvData[] = [$book->id, $book->title, $book->description];
         }
 
-        // Генерация и возврат CSV
         $filename = 'books.csv';
         $handle = fopen('php://output', 'w');
         fputcsv($handle, $csvHeader);

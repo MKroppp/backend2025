@@ -8,10 +8,8 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 
 class RoleController extends Controller
 {
-    // Изменение роли пользователя
     public function changeRole(Request $request, $id)
     {
-        // Проверка, что пользователь является администратором
         $user = JWTAuth::user();
         if ($user->role !== 'admin') {
             return response()->json(['error' => 'Unauthorized'], 403);

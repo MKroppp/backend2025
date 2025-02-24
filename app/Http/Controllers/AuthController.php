@@ -11,13 +11,10 @@ class AuthController extends Controller
 {
     public function register(Request $request)
     {
-        // Валидация через ручную проверку
         $this->validateRegisterData($request);
 
-        // Определение роли (по умолчанию 'client')
         $role = $request->input('role', 'client');
 
-        // Создание нового пользователя
         $user = User::create([
             'email' => $request->email,
             'password' => Hash::make($request->password),
@@ -29,10 +26,9 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-        // Валидация данных входа
+
         $this->validateLoginData($request);
 
-        // Попытка создать токен
         if (!$token = JWTAuth::attempt($request->only(['email', 'password']))) {
             return response()->json(['message' => 'Unauthorized'], 401);
         }
@@ -40,7 +36,6 @@ class AuthController extends Controller
         return response()->json(compact('token'));
     }
 
-    // Метод для валидации данных при регистрации
     private function validateRegisterData(Request $request)
     {
         if (empty($request->email) || empty($request->password)) {
@@ -56,7 +51,6 @@ class AuthController extends Controller
         }
     }
 
-    // Метод для валидации данных при входе
     private function validateLoginData(Request $request)
     {
         if (empty($request->email) || empty($request->password)) {

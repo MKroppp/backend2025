@@ -11,15 +11,12 @@ class BookController extends Controller
 {
     public function index()
     {
-        // Получаем список всех книг
         $books = Book::with('genres', 'authors')->get();
         return response()->json($books);
     }
 
-    // Получение информации по отдельной книге
     public function show($id)
     {
-        // Получаем книгу по ID
         $book = Book::with('genres', 'authors')->find($id);
         if (!$book) {
             return response()->json(['message' => 'Book not found'], 404);
@@ -27,7 +24,6 @@ class BookController extends Controller
         return response()->json($book);
     }
 
-    // Добавление новой книги
     public function store(Request $request)
 {
     $user = JWTAuth::parseToken()->authenticate();
@@ -58,7 +54,6 @@ class BookController extends Controller
         return response()->json(['errors' => $validationErrors], 400);
     }
 
-    // Создание жанров, если они не существуют
     $genreIds = collect($request->genres)->map(function ($genreName) {
         $genre = DB::table('genres')->where('name', $genreName)->first();
 
@@ -71,7 +66,6 @@ class BookController extends Controller
         return $genre;
     });
 
-    // Создание авторов, если они не существуют
     $authorIds = collect($request->authors)->map(function ($authorName) {
         $author = DB::table('authors')->where('name', $authorName)->first();
 
@@ -84,28 +78,21 @@ class BookController extends Controller
         return $author;
     });
 
-    // Создаем книгу
     $book = Book::create([
         'title' => $request->title,
         'description' => $request->description,
     ]);
 
-    // Связываем книгу с жанрами и авторами
     $book->genres()->sync($genreIds);
     $book->authors()->sync($authorIds);
 
     return response()->json($book, 201);
 }
 
-
-
-    // Удаление книги 
     public function destroy($id)
     {
-        // Получаем текущего пользователя
-        $user = JWTAuth::user();
+         $user = JWTAuth::user();
 
-        // Проверка, если пользователь не администратор
         if ($user->role !== 'admin') {
             return response()->json(['error' => 'Unauthorized'], 403);
         }
@@ -119,7 +106,6 @@ class BookController extends Controller
         return response()->json(['message' => 'Book deleted successfully']);
     }
 
-    // Добавление книги в избранное
     public function addToFavorites($id)
     {
         $user = JWTAuth::user();
@@ -132,7 +118,6 @@ class BookController extends Controller
         return response()->json(['message' => 'Book added to favorites']);
     }
 
-    // Удаление книги из избранного
     public function removeFromFavorites($id)
     {
         $user = JWTAuth::user();
